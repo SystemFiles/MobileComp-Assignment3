@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Assignment3</string>
+    <string name="score_item_name_text">%s</string>
+    <string name="score_item_score_amount">Score: %d</string>
+    <string name="txt_high_score_default">High Score:</string>
+    <string name="txt_high_score_withscore_text">High Score: %d</string>
+    <string name="txt_high_score_name_default">by:</string>
+    <string name="txt_high_score_name_withscore_text">by: %s</string>
+    <string name="hint_enter_score_text">enter score</string>
+    <string name="hint_enter_name_text">enter name</string>
+    <string name="btn_submit_text">Submit</string>
+    <string name="btn_view_scores_text">View All Scores</string>
+    <string name="btn_reset_scores_text">Reset Scores</string>
+    <string name="err_name_required_text">Name is required</string>
+    <string name="err_score_required_text">Score is required</string>
+</resources>
