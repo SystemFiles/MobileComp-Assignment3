@@ -13,4 +13,7 @@
     <string name="btn_reset_scores_text">Reset Scores</string>
     <string name="err_name_required_text">Name is required</string>
     <string name="err_score_required_text">Score is required</string>
+    <string name="err_no_scores_to_list_from_file_text">Error: Cannot display scores..no scores found in file.</string>
+    <string name="err_no_scores_to_list_text">Error: Will not display empty score list!</string>
+    <string name="err_could_not_read_file">Could not read file contents..</string>
 </resources>

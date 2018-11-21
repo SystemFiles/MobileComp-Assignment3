@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,6 +63,7 @@ public class MainActivity extends Activity {
      * Performs all the need setups for controls on the UI
      */
     private void setupUI() {
+        Log.i(TAG, "setupUI: Setting up user interface...");
         btnSubmit.setOnClickListener(new View.OnClickListener() { //onClick for submit button
             @Override
             public void onClick(View view) {
@@ -96,6 +98,9 @@ public class MainActivity extends Activity {
                         saveScoreToFile();
                     }
                 } catch (IOException e) { //catch input/output exceptions
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.err_could_not_read_file),
+                            Toast.LENGTH_LONG).show();
                     Log.e(TAG, "onCreate: Error handling file interaction...");
                 }
 
@@ -120,12 +125,28 @@ public class MainActivity extends Activity {
                     Log.e(TAG, "onCreate: Error handling file interaction...");
                 }
 
-                ArrayList<Score> listOfScores;
-                listOfScores = readFile(fis);
+                if (fis != null) {
+                    ArrayList<Score> listOfScores;
+                    listOfScores = readFile(fis);
 
-                Intent scoreIntent = new Intent(getApplicationContext(), DisplayActivity.class);
-                scoreIntent.putExtra(SCORES_KEY, listOfScores);
-                startActivity(scoreIntent);
+
+                    // Send scores to displayActivity
+                    if (!listOfScores.isEmpty()) {
+                        Intent scoreIntent = new Intent(getApplicationContext(), DisplayActivity.class);
+                        scoreIntent.putExtra(SCORES_KEY, listOfScores);
+                        startActivity(scoreIntent);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                getString(R.string.err_no_scores_to_list_text),
+                                Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    // Tell user no scores exist
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.err_no_scores_to_list_from_file_text),
+                            Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "onCreate: No scores from intent");
+                }
             }
         });
     }
@@ -143,6 +164,7 @@ public class MainActivity extends Activity {
         writeFile(score.toFile(), fos);
 
 
+        Log.i(TAG, "saveScoreToFile: Saving scores to file...");
         // Open file for reading after writing
         try {
             fis = openFileInput(FILE_NAME);
@@ -169,6 +191,7 @@ public class MainActivity extends Activity {
      * Reads file for scores and sets them
      */
     private void readForScoresDisplay() {
+        Log.i(TAG, "readForScoresDisplay: Reading scores to display");
         try {
             File file = new File(getFilesDir(), FILE_NAME); // Creates new file object (based on scores.txt)
             ArrayList<Score> listOfScores; // Arraylist created when opening the app to store scores
@@ -176,7 +199,7 @@ public class MainActivity extends Activity {
             if (file.exists()) { //will only read file if it exists, else nothing is read
                 fis = openFileInput(FILE_NAME); //opens the file for reading
                 listOfScores = readFile(fis); //initializes the arraylist based
-                                                // on the list returned by readFile
+                // on the list returned by readFile
 
 
                 /*
@@ -197,8 +220,9 @@ public class MainActivity extends Activity {
 
     /**
      * Writes scores to file
+     *
      * @param toFile The file
-     * @param fos The output stream
+     * @param fos    The output stream
      */
     public void writeFile(String toFile, FileOutputStream fos) {
         PrintWriter writer = new PrintWriter(fos);
@@ -212,6 +236,7 @@ public class MainActivity extends Activity {
      * I figured since we typically need to read a file for the list, just create it while reading from it
      * However, this means that every time we read from the file, we are just creating a new ArrayList instead
      * of appending the old one...
+     *
      * @param fis The file input-stream.
      * @return A list of score objects.
      */
@@ -228,8 +253,8 @@ public class MainActivity extends Activity {
 
         for (int i = 0; i < listOfScores.size(); i++) { //bubble sort algorithm that will go through the arrayList and swap each Score if the score is greater than the pervious one
             for (int j = i; j > 0; j--) {
-                if(listOfScores.get(j).compareTo(listOfScores.get(j - 1)) > 0) {
-                    Collections.swap(listOfScores, j, j -1);
+                if (listOfScores.get(j).compareTo(listOfScores.get(j - 1)) > 0) {
+                    Collections.swap(listOfScores, j, j - 1);
                 }
             }
         }

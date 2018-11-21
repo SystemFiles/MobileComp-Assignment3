@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -13,6 +15,9 @@ import model.Score;
 import model.ScoreListAdapter;
 
 public class DisplayActivity extends Activity {
+
+    // Activity Constants
+    private final String TAG = "DISPLAY_ACTIVITY";
 
     // Declare the recycler view
     private RecyclerView rViewScoresList;
@@ -31,6 +36,7 @@ public class DisplayActivity extends Activity {
                 scoreIntent.getParcelableArrayListExtra(MainActivity.SCORES_KEY);
 
         // List the scores in the view.
+        Log.i(TAG, "onCreate: Listing scores...");
         listScoresInView(scoreList);
     }
 
