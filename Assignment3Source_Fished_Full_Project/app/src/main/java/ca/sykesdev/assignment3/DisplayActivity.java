@@ -7,12 +7,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import model.Score;
-import model.ScoreListAdapter;
+import ca.sykesdev.assignment3.model.Score;
 
 public class DisplayActivity extends Activity {
 

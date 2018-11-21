@@ -1,4 +1,4 @@
-package model;
+package ca.sykesdev.assignment3;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ca.sykesdev.assignment3.R;
+import ca.sykesdev.assignment3.model.Score;
 
 /**
  * Used to list all the places in descending order
@@ -51,6 +51,7 @@ public class ScoreListAdapter extends RecyclerView.Adapter<ScoreListAdapter.Scor
     @Override
     public void onBindViewHolder(@NonNull ScoreListAdapter.ScoreListViewHolder scoreListViewHolder,
                                  int position) {
+        // Set text values in view
         scoreListViewHolder.mTxtScoreName.setText(mScoresList.get(position).getName());
         scoreListViewHolder.mTxtScoreAmount.setText(mScoresList.get(position).getDisplayScore());
     }

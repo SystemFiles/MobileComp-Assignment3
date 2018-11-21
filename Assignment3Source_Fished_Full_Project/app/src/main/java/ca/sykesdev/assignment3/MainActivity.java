@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-import model.Score;
+import ca.sykesdev.assignment3.model.Score;
 
 public class MainActivity extends Activity {
 
@@ -115,7 +115,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        // Starts new activity and passes the arrayList in the intent (needs to be implemented...)
+        // Starts new activity and passes the arrayList in the intent
         btnViewScores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +128,6 @@ public class MainActivity extends Activity {
                 if (fis != null) {
                     ArrayList<Score> listOfScores;
                     listOfScores = readFile(fis);
-
 
                     // Send scores to displayActivity
                     if (!listOfScores.isEmpty()) {
@@ -159,8 +158,7 @@ public class MainActivity extends Activity {
         Score score = new Score(edtName.getText().toString(),
                 Integer.parseInt(edtScore.getText().toString()));
 
-        // The writeFile function is called
-        // toFile() simply returns "Score.getName():Score.getScore()", which is written to the file
+        // Write to the file from FileOutputStream
         writeFile(score.toFile(), fos);
 
 
@@ -196,11 +194,10 @@ public class MainActivity extends Activity {
             File file = new File(getFilesDir(), FILE_NAME); // Creates new file object (based on scores.txt)
             ArrayList<Score> listOfScores; // Arraylist created when opening the app to store scores
 
-            if (file.exists()) { //will only read file if it exists, else nothing is read
-                fis = openFileInput(FILE_NAME); //opens the file for reading
-                listOfScores = readFile(fis); //initializes the arraylist based
-                // on the list returned by readFile
-
+            //will only read file if it exists, else nothing is read
+            if (file.exists()) {
+                fis = openFileInput(FILE_NAME);
+                listOfScores = readFile(fis);
 
                 /*
                    The score and name textfields will display the first value of the listOfScores
@@ -232,10 +229,9 @@ public class MainActivity extends Activity {
 
     /**
      * Read file helper function
-     * NOTE: readFile returns the arrayList automatically sorted, instead of a String
-     * I figured since we typically need to read a file for the list, just create it while reading from it
-     * However, this means that every time we read from the file, we are just creating a new ArrayList instead
-     * of appending the old one...
+     *
+     * Reads data from the file and parse it to be stored as a
+     * student object and then sort the list.
      *
      * @param fis The file input-stream.
      * @return A list of score objects.
@@ -245,13 +241,18 @@ public class MainActivity extends Activity {
         Scanner scanner;
         scanner = new Scanner(fis);
         while (scanner.hasNextLine()) {
-            String[] currentScore = scanner.nextLine().split(":"); //creates a String array for every line (array contains name and score)
-            Score score = new Score(currentScore[0], Integer.parseInt(currentScore[1])); //creates a new Score object for every line based on each line's string array
-            listOfScores.add(score); //adds the new object to the ArrayList
+            //creates a String array for every line (array contains name and score)
+            String[] currentScore = scanner.nextLine().split(":");
+            //creates a new Score object for every line based on each line's string array
+            listOfScores.add(new Score(currentScore[0], Integer.parseInt(currentScore[1]))); //adds the new object to the ArrayList
         }
         scanner.close();
 
-        for (int i = 0; i < listOfScores.size(); i++) { //bubble sort algorithm that will go through the arrayList and swap each Score if the score is greater than the pervious one
+        /*
+        bubble sort algorithm that will go through the arrayList and swap each Score
+        if the score is greater than the pervious one (Defined in Student.java
+        */
+        for (int i = 0; i < listOfScores.size(); i++) {
             for (int j = i; j > 0; j--) {
                 if (listOfScores.get(j).compareTo(listOfScores.get(j - 1)) > 0) {
                     Collections.swap(listOfScores, j, j - 1);
@@ -262,9 +263,10 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Delete the file
+     * Delete the file and calls to resets fields
      */
-    public void deleteFile() { //creates the file object based on the scores.txt file
+    public void deleteFile() {
+        //creates the file object based on the scores.txt file (if exists)
         File file = new File(getFilesDir(), FILE_NAME);
         file.delete(); //deletes the file and resets the text fields
         resetFields();
